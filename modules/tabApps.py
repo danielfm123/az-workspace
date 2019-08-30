@@ -11,7 +11,7 @@ class tabApps(QWidget):
         self.parent = parent
         layout = QVBoxLayout()
 
-        mensaje = QLabel("Si eres usuario de linux, debes instalar sshpass y aws-cli")
+        mensaje = QLabel("Si eres usuario de linux, debes instalar sshpass, azure-cli y azcopy")
 
         choco = QPushButton('Install Chocolatelly')
         choco.clicked.connect(self.fn_choco)
@@ -29,7 +29,7 @@ class tabApps(QWidget):
         self.setLayout(layout)
 
     def fn_basic(self):
-        fn.sudo('choco install git awscli winscp openssh notepadplusplus x2go -y')
+        fn.sudo('choco install git azure-cli azcopy10 winscp openssh notepadplusplus x2go -y')
         msgBox = QMessageBox()
         msgBox.setText("In order to SFTP to work you need to re open this application")
         msgBox.exec_()

@@ -11,6 +11,13 @@ from PySide2.QtWidgets import *
 import os
 from modules import SettingsManager
 import platform
+from azure.common.client_factory import get_client_from_cli_profile
+from azure.mgmt.compute import ComputeManagementClient
+from azure.mgmt.network import NetworkManagementClient
+
+compute_client = get_client_from_cli_profile(ComputeManagementClient)
+network_client = get_client_from_cli_profile(NetworkManagementClient)
+
 settings = SettingsManager.settingsManager()
 
 home = os.path.expanduser("~")
@@ -20,22 +27,10 @@ class idEc2Form(QDialog):
         super(idEc2Form,self).__init__(parent)
         self.parent = parent
         self.setMinimumWidth(400)
-        self.setWindowTitle("AWS API Manager")
+        self.setWindowTitle("AZ API Manager")
 
-        self.bucket = QComboBox()
-
-        try:
-            con = settings.getSession()
-            ec2 = con.resource("ec2", use_ssl = False)
-            instances = list(ec2.instances.all())
-            s3 = con.resource("s3", use_ssl=False)
-            buckets = {x.name: x for x in list(s3.buckets.all())}
-            for b in buckets:
-                self.bucket.addItem(b)
-        except:
-            pass
-
-        dict = {i.id : tagsToDict(i.tags)["Name"]  for i in instances if i.tags is not None}
+        vm = compute_client.virtual_machines.list('DataArts')
+        dict = {i.name : i.name  for i in vm}
 
         self.combo_ec2 = QComboBox()
         for i in dict.keys():
@@ -52,22 +47,19 @@ class idEc2Form(QDialog):
         self.mainLayout = QVBoxLayout()
 
         self.keys = QGridLayout()
-        self.keys.addWidget(QLabel("EC2 Lab Name"),0,0)
+        self.keys.addWidget(QLabel("VM Name"),0,0)
         self.keys.addWidget(self.combo_ec2, 0, 1)
         self.keys.addWidget(QLabel("Operating System"), 1, 0)
         self.keys.addWidget(self.os, 1, 1)
         self.user = QLineEdit()
         self.user.setText(settings.getParam('user'))
-        self.keys.addWidget(QLabel('Ec2 User'),2,0)
+        self.keys.addWidget(QLabel('VM User'),2,0)
         self.keys.addWidget(self.user, 2, 1)
         self.pwd = QLineEdit()
         self.pwd.setText(settings.getParam('ec2_passwd'))
         self.pwd.setEchoMode(QLineEdit.Password)
-        self.keys.addWidget(QLabel("Ec2 Current Password"), 3, 0)
+        self.keys.addWidget(QLabel("VM Current Password"), 3, 0)
         self.keys.addWidget(self.pwd, 3, 1)
-        self.keys.addWidget(QLabel("Default Bucket"), 4, 0)
-        self.keys.addWidget(self.bucket, 4, 1)
-        self.bucket.setCurrentText(settings.getParam("bucket"))
         self.save = QPushButton("Save")
         self.save.clicked.connect(self.save_to_file)
 
@@ -79,21 +71,12 @@ class idEc2Form(QDialog):
     def save_to_file(self):
         id = self.combo_ec2.currentData()
         print(self.combo_ec2.currentData())
-        settings.setParam('ec2_id',id)
+        settings.setParam('vm_name',id)
         settings.setParam('os', self.os.currentText())
-        #settings.setParam('team', self.bucket.currentText()) #legacy
-        settings.setParam('bucket', self.bucket.currentText())
-        settings.setParam('ec2_passwd', self.pwd.text())
-        settings.setParam('user', self.user.text())
+        settings.setParam('vm_password', self.pwd.text())
+        settings.setParam('vm_user', self.user.text())
         settings.writeParams()
         self.parent.parent.refresh()
-
-        with open(home + "/.bucket","+w") as f:
-            f.write(self.bucket.currentText())
-
-        if platform.system() == 'Windows':
-            with open(home + "/Documents/.bucket","+w") as f:
-                f.write(self.bucket.currentText())
 
         self.close()
 

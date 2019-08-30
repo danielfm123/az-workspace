@@ -1,10 +1,10 @@
 import json
-from os.path import expanduser
-import boto3
+import os
 
-home = expanduser("~")
 
-settings_path = home+'/.workspace.json'
+home = os.path.expanduser("~")
+
+settings_path = home+'/.az-workspace.json'
 
 
 def getParams():
@@ -50,14 +50,6 @@ class settingsManager():
         except:
             return("")
 
-    def getSession(self):
-        try:
-            session = boto3.Session(aws_access_key_id=self.getParam("id"),aws_secret_access_key=self.getParam("key"),region_name=self.getParam("region"))
-            return session
-        except:
-            print('cant connect aws')
-            return None
-
     def getInstance(self):
         try:
             session = self.getSession()
@@ -69,7 +61,7 @@ class settingsManager():
 
     def getIP(self):
         try:
-            self.ip = self.getInstance().public_ip_address
+            self.ip = 1
             return self.ip
         except:
             return None

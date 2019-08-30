@@ -10,7 +10,7 @@ from PySide2.QtGui import *
 import boto3
 import time
 #import os
-from modules.form_aws_keys import IdsForm
+from modules.form_keys import IdsForm
 from modules.functions import *
 from modules import tabMain, tabSetup, tabApps
 import configparser
@@ -24,7 +24,7 @@ class mainWindow(QMainWindow):
         super(mainWindow,self).__init__(parent)
 
         self.setMinimumWidth(500)
-        self.setWindowTitle("danielfm123 WorkSpace")
+        self.setWindowTitle("danielfm123 AZ-WorkSpace")
         self.setWindowIcon(QIcon(resource_path(os.path.join('files','ec2.png') )))
 
         self.setCentralWidget(mainWidget(self))

@@ -1,5 +1,5 @@
 
-from modules.form_aws_keys import *
+from modules.form_keys import *
 from modules.form_bucket import  BucketForm
 from modules.form_pwd import  PwdForm
 from modules.form_instance_id import idEc2Form
