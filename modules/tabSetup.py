@@ -1,7 +1,6 @@
 
 from modules.form_keys import *
 from modules.form_bucket import  BucketForm
-from modules.form_pwd import  PwdForm
 from modules.form_instance_id import idEc2Form
 from modules import functions
 import os
@@ -16,11 +15,8 @@ class tabSetup(QWidget):
         saveid = QPushButton('Set Credentials')
         saveid.clicked.connect(self.fn_saveid)
 
-        ec2 = QPushButton('Select Ec2 and Default Bucket')
-        ec2.clicked.connect(self.fn_set_ec2)
-
-        pwd = QPushButton('Set Password on Lab')
-        pwd.clicked.connect(self.fn_set_pwd)
+        ec2 = QPushButton('Select Virtual Machine')
+        ec2.clicked.connect(self.fn_set_vm)
 
         ec2_api = QPushButton('Upload your Settings to Ec2')
         ec2_api.clicked.connect(self.fn_upload_api)
@@ -48,7 +44,7 @@ class tabSetup(QWidget):
         win = PwdForm(self)
         win.exec()
 
-    def fn_set_ec2(self):
+    def fn_set_vm(self):
         win = idEc2Form(self)
         win.exec()
 

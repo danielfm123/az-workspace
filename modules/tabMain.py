@@ -129,8 +129,7 @@ class tabMain(QWidget):
             self.jupyter.setEnabled(False)
 
 
-        self.id_ec2 = settings.getParam('ec2_id')
-        self.session = settings.getSession()
+        self.vm_name = settings.getParam('vm_name')
 
         self.i = settings.getInstance()
         if self.i == None:

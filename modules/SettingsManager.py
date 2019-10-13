@@ -50,15 +50,6 @@ class settingsManager():
         except:
             return("")
 
-    def getInstance(self):
-        try:
-            session = self.getSession()
-            ec2 = session.resource("ec2",use_ssl=False)
-            self.instance = ec2.Instance(id=self.getParam('ec2_id'))
-            return self.instance
-        except:
-            return None
-
     def getIP(self):
         try:
             self.ip = 1

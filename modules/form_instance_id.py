@@ -32,11 +32,11 @@ class idEc2Form(QDialog):
         vm = compute_client.virtual_machines.list('DataArts')
         dict = {i.name : i.name  for i in vm}
 
-        self.combo_ec2 = QComboBox()
+        self.combo_vm = QComboBox()
         for i in dict.keys():
-            self.combo_ec2.addItem(dict[i],i)
+            self.combo_vm.addItem(dict[i], i)
         try:
-            self.combo_ec2.setCurrentText(dict[settings.getParam("ec2_id")])
+            self.combo_vm.setCurrentText(dict[settings.getParam("ec2_id")])
         except:
             pass
 
@@ -48,15 +48,15 @@ class idEc2Form(QDialog):
 
         self.keys = QGridLayout()
         self.keys.addWidget(QLabel("VM Name"),0,0)
-        self.keys.addWidget(self.combo_ec2, 0, 1)
+        self.keys.addWidget(self.combo_vm, 0, 1)
         self.keys.addWidget(QLabel("Operating System"), 1, 0)
         self.keys.addWidget(self.os, 1, 1)
         self.user = QLineEdit()
-        self.user.setText(settings.getParam('user'))
+        self.user.setText(settings.getParam('vm_user'))
         self.keys.addWidget(QLabel('VM User'),2,0)
         self.keys.addWidget(self.user, 2, 1)
         self.pwd = QLineEdit()
-        self.pwd.setText(settings.getParam('ec2_passwd'))
+        self.pwd.setText(settings.getParam('vm_password'))
         self.pwd.setEchoMode(QLineEdit.Password)
         self.keys.addWidget(QLabel("VM Current Password"), 3, 0)
         self.keys.addWidget(self.pwd, 3, 1)
@@ -69,8 +69,8 @@ class idEc2Form(QDialog):
         self.setLayout(self.mainLayout)
 
     def save_to_file(self):
-        id = self.combo_ec2.currentData()
-        print(self.combo_ec2.currentData())
+        id = self.combo_vm.currentData()
+        print(self.combo_vm.currentData())
         settings.setParam('vm_name',id)
         settings.setParam('os', self.os.currentText())
         settings.setParam('vm_password', self.pwd.text())
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = idEc2Form(None)
     window.show()
-# sys.exit(app.exec_())
+   # sys.exit(app.exec_())
     app.exec_()
 
 
