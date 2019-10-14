@@ -131,7 +131,7 @@ class tabMain(QWidget):
 
         self.vm_name = settings.getParam('vm_name')
 
-        self.i = settings.getInstance()
+        #self.i = settings.getInstance()
         if self.i == None:
             print("please setup api keys")
 

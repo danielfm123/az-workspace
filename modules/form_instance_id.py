@@ -13,10 +13,8 @@ from modules import SettingsManager
 import platform
 from azure.common.client_factory import get_client_from_cli_profile
 from azure.mgmt.compute import ComputeManagementClient
-from azure.mgmt.network import NetworkManagementClient
 
 compute_client = get_client_from_cli_profile(ComputeManagementClient)
-network_client = get_client_from_cli_profile(NetworkManagementClient)
 
 settings = SettingsManager.settingsManager()
 
